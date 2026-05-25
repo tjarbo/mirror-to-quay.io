@@ -1,0 +1,32 @@
+name: Mirror pocket-id image
+
+on:
+  schedule:
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: "Container image tag to mirror"
+        required: false
+        default: "v2"
+
+jobs:
+  mirror:
+    runs-on: ubuntu-slim
+    permissions: {}
+
+    steps:
+      - name: Log in to Quay.io
+        uses: docker/login-action@v3
+        with:
+          registry: quay.io
+          username: ${{ secrets.QUAY_USERNAME }}
+          password: ${{ secrets.QUAY_PASSWORD }}
+
+      - name: Pull, tag, and push image
+        env:
+          IMAGE_TAG: ${{ github.event.inputs.image_tag || 'v2' }}
+        run: |
+          docker pull ghcr.io/pocket-id/pocket-id:${IMAGE_TAG}
+          docker tag ghcr.io/pocket-id/pocket-id:${IMAGE_TAG} quay.io/tjarbo/pocket-id:${IMAGE_TAG}
+          docker push quay.io/tjarbo/pocket-id:${IMAGE_TAG}
