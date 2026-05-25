@@ -12,7 +12,7 @@ on:
 
 jobs:
   mirror:
-    runs-on: ubuntu-slim
+    runs-on: ubuntu-latest
     permissions: {}
 
     steps:
