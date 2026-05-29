@@ -1,9 +1,14 @@
-name: Mirror container images
+name: Mirror single image (ad-hoc)
 
 on:
-  schedule:
-    - cron: "0 6 * * *"
   workflow_dispatch:
+    inputs:
+      source:
+        description: "Full source image reference (e.g. ghcr.io/org/image:tag)"
+        required: true
+      destination:
+        description: "Full destination image reference (e.g. quay.io/org/image:tag)"
+        required: true
 
 jobs:
   mirror:
@@ -29,5 +34,8 @@ jobs:
           username: ${{ secrets.QUAY_USERNAME }}
           password: ${{ secrets.QUAY_PASSWORD }}
 
-      - name: Mirror images from config
-        run: python mirror.py config
+      - name: Mirror image
+        env:
+          SOURCE: ${{ inputs.source }}
+          DESTINATION: ${{ inputs.destination }}
+        run: python mirror.py adhoc "$SOURCE" "$DESTINATION"
