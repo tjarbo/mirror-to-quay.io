@@ -1,8 +1,9 @@
-# Mirror configuration
-# Each entry defines a source image, its destination on quay.io, and the tags to mirror.
-
 images:
-  - source: ghcr.io/pocket-id/pocket-id
-    destination: quay.io/tjarbo/pocket-id
-    tags:
-      - v2
+- source: ghcr.io/pocket-id/pocket-id
+  destination: quay.io/tjarbo/pocket-id
+  tags:
+  - v2
+- source: lscr.io/linuxserver/code-server
+  destination: quay.io/tjarbo/code-server
+  tags:
+  - latest
